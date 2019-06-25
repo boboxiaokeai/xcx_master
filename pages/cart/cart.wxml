@@ -1,2 +1,77 @@
 <!--pages/cart/cart.wxml-->
-<text>pages/cart/cart.wxml</text>
+<view class="panel">
+  <block wx:if="{{stores.length > 0}}">
+    <block wx:for="{{stores}}" wx:for-item="store" wx:key="t" wx:for-index="idx">
+      <view class="cart-section">
+        <view class="head-wrap" style=''>
+          <view class="icon-select"><image src="../../images/option{{store.selected ? '_cur' : ''}}.png" mode="widthFix" id="{{idx}}" data-idx="{{idx}}" bindtap="dpSelect"/></view>
+          <view class="titlec">全选</view>
+          <view class="goods-sub-line">
+            <view class="m-action">
+              <view class="m-action-item"  bindtap="deleteCarts">删除</view>
+            </view>
+          </view>
+        </view>
+        <block wx:for="{{store.goodsCarts}}" wx:for-item="cart" wx:key="t_sub" wx:for-index="idx_sub">
+          <view class="item">
+            <view class="goods">
+              <view class="icon-select">
+                <image src="../../images/option{{cart.selected ? '_cur' : ''}}.png" mode="widthFix" data-aaa="{{idx}}" data-bbb="{{idx_sub}}" bindtap="spSelect"/>
+              </view>
+              <!--  mode="widthFix" 去掉自适应，避免后台上传图片不规则溢出屏幕-->
+              <image src="{{cart.goodsUrl}}" mode="" class="image" bindtap='openDetail' id="{{cart.goods.id}}"/>
+              <view class="content">
+                <view class="name" bindtap='openDetail' id="{{cart.goods.id}}">{{cart.goods.goods_name}}</view>
+                <view class="sku-coll">{{cart.spec_info}}</view>
+                <view class="goods-line clearfix">
+                  <view class="price">¥<view class="int">{{cart.price}}</view></view>
+                  <view class="price del-price">¥<view class="special-offer-del">{{cart.orig_price}}</view></view>
+                  <view class="num-and-more">
+                    <view class="number-wrap clearfix">
+                      <view class="number">
+                          <view class="decrease decrease-left disabled" data-type="1" data-aaa="{{idx}}" data-bbb="{{idx_sub}}" bindtap="changeNum" data-kucun="{{cart.goods.goods_inventory}}">-</view>
+                          <input id="number" disabled="true" value="{{cart.count}}" type="number"/>
+                          <view class="decrease decrease-right" data-type="2" data-aaa="{{idx}}" data-bbb="{{idx_sub}}" bindtap="changeNum" data-kucun="{{cart.goods.goods_inventory}}">+</view>
+                      </view>
+                    </view>
+                  </view>
+                </view>
+              </view>
+            </view>
+          </view>
+        </block>
+      </view>
+    </block>
+    <view class="blank"></view>
+    <view class="footer-none"></view>
+    <view class="order-submitOrder">
+      <view class="shifu">
+        <view class="icon-select" bindtap="selectAll">
+          <image src="../../images/option{{select_flag ? '_cur' : ''}}.png" mode="widthFix" />
+        </view>合计：<view class="price">¥{{total_price}}</view>
+      </view>
+      <view class="btn red-btn" bindtap="jieSuan">去结算（{{goods_num}}）</view>
+    </view>
+  </block>
+  <block wx:else>
+    <view class="tips-no-date">
+      <image src="../../images/icon/icon_Nodate.png" class="icon-img" mode="widthFix"/>
+      <view class="txt">暂无数据</view>
+      <view class="btn" bindtap='toIndex'>随便逛逛</view>
+    </view>
+  </block>
+  <cover-view class="widget-tiper-mask" hidden="{{dwhidden}}" style='z-index:10;'></cover-view>
+  <cover-view class="widget-tiper" hidden="{{dwhidden}}" style="left: 15%; top: 30%;z-index:9999;">
+    <cover-view class="widget-tiper-inner">
+        <cover-view class="tiper-head">提示</cover-view>
+          <cover-view class="tiper-body">
+            <cover-view class="tips-txt">{{dwcontent}}</cover-view>
+          </cover-view>
+          <cover-view class="tiper-foot clearfix">
+            <cover-view class="tiper-button alert" bindtap="zdl">知道了</cover-view>
+          </cover-view>
+      </cover-view>
+  </cover-view>
+</view>
+
+
